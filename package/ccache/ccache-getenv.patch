@@ -1,0 +1,25 @@
+diff --git a/src/Config.cpp b/src/Config.cpp
+index ee4cd9f7..086fa526 100644
+--- a/src/Config.cpp
++++ b/src/Config.cpp
+@@ -162,7 +162,7 @@ const std::unordered_map<std::string, std::string> k_env_variable_table = {
+   {"DEBUG", "debug"},
+   {"DEBUGDIR", "debug_dir"},
+   {"DEPEND", "depend_mode"},
+-  {"DIR", "cache_dir"},
++  // {"DIR", "cache_dir"}, // cache_dir is set below
+   {"DIRECT", "direct_mode"},
+   {"DISABLE", "disable"},
+   {"EXTENSION", "cpp_extension"},
+@@ -525,7 +525,10 @@ Config::read()
+ 
+   MTR_BEGIN("config", "conf_update_from_environment");
+   update_from_environment();
+-  // (cache_dir is set above if CCACHE_DIR is set.)
++  const char* const env_ccache_dir = getenv("CCACHE_DIR");
++  if (env_ccache_dir && *env_ccache_dir) {
++    set_item("cache_dir", env_ccache_dir, "DIR", false, "environment");
++  }
+   MTR_END("config", "conf_update_from_environment");
+ 
+   if (cache_dir().empty()) {

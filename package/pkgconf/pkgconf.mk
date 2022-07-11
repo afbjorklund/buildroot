@@ -13,6 +13,11 @@ PKGCONF_CPE_ID_VENDOR = pkgconf
 
 PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/bin/pkg-config
 
+# We are used by ccache, so we can't use ccache
+HOST_PKGCONF_CONF_OPTS += \
+        CC="$(HOSTCC_NOCCACHE)" \
+        CXX="$(HOSTCXX_NOCCACHE)"
+
 define PKGCONF_LINK_PKGCONFIG
 	ln -sf pkgconf $(TARGET_DIR)/usr/bin/pkg-config
 endef
